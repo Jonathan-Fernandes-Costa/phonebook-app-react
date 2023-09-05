@@ -3,8 +3,13 @@ import axios from 'axios';
 import FormCadastro from './components/FormCadastro';
 import FormAtualizar from './components/FormAtualizar';
 
+//Criar um formulário Generico de cadastro/atualizar atraves de props
+
+//Separar a pagina na pasta "pages"
+//Criar a pagina de serviços e consumir a api com axios nela
+//Radix UI e tailwindcss
+//Usar o Radix para criar os modal
 function App() {
-    const urlApi = "https://api.box3.work/api/Contato/6c39d089-d593-44b5-8b7b-acad269932a8"
     const [contacts, setContacts] = useState([{}]);
     const[searchContact, setSearchContact] = useState({});
     const[showSearchContact, setShowSearchContact] = useState(false);
