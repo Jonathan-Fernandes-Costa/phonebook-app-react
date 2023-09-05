@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import FormCadastro from './components/FormCadastro';
+import FormAtualizar from './components/FormAtualizar';
 
 function App() {
     const urlApi = "https://api.box3.work/api/Contato/6c39d089-d593-44b5-8b7b-acad269932a8"
     const [contacts, setContacts] = useState([{}]);
-    const [showList, setShowList] = useState(false); // Estado para controlar a exibição da lista
-    const [showAddForm, setShowAddForm] = useState(false); // Estado para controlar a exibição do formulário de adição
-    const [showUpdateForm, setShowUpdateForm] = useState(false); // Estado para controlar a exibição do formulário de atualização
-    const [showDeleteForm, setShowDeleteForm] = useState(false); // Estado para controlar a exibição do formulário de exclusão
-    const [updateContactId, setUpdateContactId] = useState(''); // Estado para armazenar o ID do contato a ser atualizado
-    const [deleteContactId, setDeleteContactId] = useState(''); // Estado para armazenar o ID do contato a ser excluído
+    const[searchContact, setSearchContact] = useState({});
+    const[showSearchContact, setShowSearchContact] = useState(false);
+    const [showList, setShowList] = useState(false);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [showUpdateForm, setShowUpdateForm] = useState(false);
+    const [showDeleteForm, setShowDeleteForm] = useState(false);
+    const [showSearchForm, setShowSearchForm] = useState(false);
+    const [deleteContactId, setDeleteContactId] = useState('');
+    const [searchContactId, setSearchContactId] = useState('');
     useEffect(() => {
 
         axios.get(urlApi)
@@ -21,24 +26,39 @@ function App() {
             });
     }, []);
     const handleDelete = (id) => {
-        // Faça uma solicitação DELETE para excluir o contato da API
         axios.delete(`${urlApi}/${id}`)
             .then(response => {
                 console.log('Contato excluído com sucesso:', response.data);
-                // Atualize a lista de contatos após a exclusão
                 setContacts(contacts.filter(contact => contact.id !== id));
-                setShowDeleteForm(false); // Ocultar o formulário de exclusão após a exclusão
+                setShowDeleteForm(false);
             })
             .catch(error => {
                 console.error('Erro ao excluir contato:', error);
             });
     };
 
-        const handleToggleList = () => {
+
+     const handleSearch = (id) => {
+         axios.get(urlApi + "/" + id)
+            .then(response => {
+                console.log('Contato encontrado com sucesso:', response.data);
+                setSearchContact(response.data)
+                setShowSearchForm(false)
+                setShowSearchContact(true)
+            })
+            .catch(error => {
+                console.error('Erro ao buscar contato:', error);
+            });
+    };
+
+
+
+    const handleToggleList = () => {
         setShowList(true);
         setShowAddForm(false);
         setShowUpdateForm(false);
         setShowDeleteForm(false);
+        setShowSearchForm(false);
         axios.get(urlApi)
             .then(response => {
                 setContacts(response.data);
@@ -48,30 +68,41 @@ function App() {
             });
     };
 
-        const handleToggleAddForm = () => {
+    const handleToggleAddForm = () => {
         setShowList(false);
         setShowAddForm(true);
         setShowUpdateForm(false);
         setShowDeleteForm(false);
+        setShowSearchForm(false);
     };
 
-        const handleToggleUpdateForm = () => {
+    const handleToggleUpdateForm = () => {
         setShowList(false);
         setShowAddForm(false);
         setShowUpdateForm(true);
         setShowDeleteForm(false);
+        setShowSearchForm(false);
     };
 
-        const handleToggleDeleteForm = () => {
+    const handleToggleDeleteForm = () => {
         setShowList(false);
         setShowAddForm(false);
         setShowUpdateForm(false);
+        setShowSearchForm(false);
         setShowDeleteForm(true);
+    };
+    const handleToggleSearchForm = () => {
+        setShowList(false);
+        setShowAddForm(false);
+        setShowUpdateForm(false);
+        setShowDeleteForm(false);
+        setShowSearchForm(true);
     };
     return (
         <div>
             <h2>Lista de Contatos Box³</h2>
             <button onClick={handleToggleList}>Listar Contatos</button>
+            <button onClick={handleToggleSearchForm}>Buscar Contato</button>
             <button onClick={handleToggleAddForm}>Adicionar Contato</button>
             <button onClick={handleToggleUpdateForm}>Atualizar Contato</button>
             <button onClick={handleToggleDeleteForm}>Excluir Contato</button>
@@ -106,32 +137,40 @@ function App() {
 
 
             )}
-
+            {showSearchContact && (
+                    <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Ativo</th>
+                            <th>dataNascimento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            <tr>
+                                <th>{searchContact.id}</th>
+                                <th>{searchContact.nome}</th>
+                                <th>{searchContact.email}</th>
+                                <th>{searchContact.telefone}</th>
+                                <th>{searchContact.ativo ? "true" : "false"}</th>
+                                <th>{searchContact.dataNascimento}</th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                
+                
+            )}
             {showAddForm && (
-                <div>
-                    <h2>Adicionar Contato</h2>
-                    <form>
-
-                        <button>Adicionar</button>
-                    </form>
-                </div>
+                <FormCadastro></FormCadastro>
             )}
 
             {showUpdateForm && (
-                <div>
-                    <h2>Atualizar Contato</h2>
-                    <form>
-
-                        <input
-                            type="text"
-                            placeholder="ID do Contato a ser Atualizado"
-                            value={updateContactId}
-                            onChange={e => setUpdateContactId(e.target.value)}
-                        />
-
-                        <button>Atualizar</button>
-                    </form>
-                </div>
+                <FormAtualizar></FormAtualizar>
             )}
 
             {showDeleteForm && (
@@ -147,6 +186,21 @@ function App() {
                         />
                         <button onClick={() => handleDelete(deleteContactId)}>Excluir</button>
                     </form>
+                </div>
+            )}
+            {showSearchForm && (
+                <div>
+                    <h2>Pesquisar Contato</h2>
+                    
+                        <input
+                            type="text"
+                            placeholder="Digite o ID do Contato"
+                            value={searchContactId}
+                            onChange={e => setSearchContactId(e.target.value)}
+                        />
+                        <button onClick={() => handleSearch(searchContactId)}>Buscar</button>
+                        
+                    
                 </div>
             )}
         </div>
