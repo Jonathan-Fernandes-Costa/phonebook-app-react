@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FormCadastro from './components/FormCadastro';
 import FormAtualizar from './components/FormAtualizar';
-
-//Criar um formulário Generico de cadastro/atualizar atraves de props
-
-//Separar a pagina na pasta "pages"
-//Criar a pagina de serviços e consumir a api com axios nela
-//Radix UI e tailwindcss
-//Usar o Radix para criar os modal
+import { deleteContato, putContatos, getAllContatos, getContatoById, postContato } from './services/axios'
+//Criar um formulário Generico de cadastro/atualizar atraves de props()
+//Separar a pagina na pasta "pages"()
+//Criar a pagina de serviços e consumir a api com axios nela (X)
+//TRYcATCH apennas nos codigos do axios()
+//Radix UI e tailwindcss()
+//Usar o Radix para criar os modal()
 function App() {
     const [contacts, setContacts] = useState([{}]);
-    const[searchContact, setSearchContact] = useState({});
-    const[showSearchContact, setShowSearchContact] = useState(false);
+    const [searchContact, setSearchContact] = useState({});
+    const [showSearchContact, setShowSearchContact] = useState(false);
     const [showList, setShowList] = useState(false);
     const [showAddForm, setShowAddForm] = useState(false);
     const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -21,30 +21,20 @@ function App() {
     const [deleteContactId, setDeleteContactId] = useState('');
     const [searchContactId, setSearchContactId] = useState('');
     useEffect(() => {
-
-        axios.get(urlApi)
-            .then(response => {
-                setContacts(response.data);
-            })
-            .catch(error => {
-                console.error('Erro ao buscar contatos:', error);
-            });
+        async function FetchContatos() {
+                const response = await getAllContatos();
+                setContacts(response)
+        }
+        FetchContatos();
     }, []);
-    const handleDelete = (id) => {
-        axios.delete(`${urlApi}/${id}`)
-            .then(response => {
-                console.log('Contato excluído com sucesso:', response.data);
-                setContacts(contacts.filter(contact => contact.id !== id));
-                setShowDeleteForm(false);
-            })
-            .catch(error => {
-                console.error('Erro ao excluir contato:', error);
-            });
+    const handleDelete = async (id) => {
+        await deleteContato(id);
+        setShowDeleteForm(false);
     };
 
 
-     const handleSearch = (id) => {
-         axios.get(urlApi + "/" + id)
+    const handleSearch = (id) => {
+        axios.get(+ "/" + id)
             .then(response => {
                 console.log('Contato encontrado com sucesso:', response.data);
                 setSearchContact(response.data)
@@ -64,13 +54,7 @@ function App() {
         setShowUpdateForm(false);
         setShowDeleteForm(false);
         setShowSearchForm(false);
-        axios.get(urlApi)
-            .then(response => {
-                setContacts(response.data);
-            })
-            .catch(error => {
-                console.error('Erro ao buscar contatos:', error);
-            });
+
     };
 
     const handleToggleAddForm = () => {
@@ -143,7 +127,7 @@ function App() {
 
             )}
             {showSearchContact && (
-                    <table>
+                <table>
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -167,8 +151,8 @@ function App() {
                         }
                     </tbody>
                 </table>
-                
-                
+
+
             )}
             {showAddForm && (
                 <FormCadastro></FormCadastro>
@@ -196,16 +180,16 @@ function App() {
             {showSearchForm && (
                 <div>
                     <h2>Pesquisar Contato</h2>
-                    
-                        <input
-                            type="text"
-                            placeholder="Digite o ID do Contato"
-                            value={searchContactId}
-                            onChange={e => setSearchContactId(e.target.value)}
-                        />
-                        <button onClick={() => handleSearch(searchContactId)}>Buscar</button>
-                        
-                    
+
+                    <input
+                        type="text"
+                        placeholder="Digite o ID do Contato"
+                        value={searchContactId}
+                        onChange={e => setSearchContactId(e.target.value)}
+                    />
+                    <button onClick={() => handleSearch(searchContactId)}>Buscar</button>
+
+
                 </div>
             )}
         </div>

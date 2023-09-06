@@ -1,49 +1,49 @@
 import axios from "axios"
-
 const urlApi = "https://api.box3.work/api/Contato/6c39d089-d593-44b5-8b7b-acad269932a8"
 async function getAllContatos() {
-    await axios.get(urlApi)
-        .then(response => {
-            return response.data
-        })
-        .catch(error => {
-            console.log("Erro ao buscar contatos")
-        });
+    try {
+        const response = await axios.get(urlApi);
+        return response.data;
+    } catch (error) {
+        console.log("Erro ao buscar contatos", error)
+    }
 }
 async function getContatoById(id) {
-    axios.get(urlApi + "/" + id)
-    .then(response =>{
-        return response.data
-    })
-    .catch(error => {
+    try {
+        const response = await axios.get(urlApi + "/" + id);
+        return response.data;
+
+    } catch (error) {
         console.log("Erro ao buscar contato por ID", error)
-    })
+    }
 
 }
-async function postContato(contato){
-    axios.post(urlApi, contato)
-    .then(response =>{
+async function postContato(contato) {
+    try{
+        const response = await axios.post(urlApi, contato)
         console.log("Cadastro realizado com sucesso")
-    })
-    .catch(error=>{
-        console.log("Erro ao Cadastrar", error)
-    })
+        return response.data
+    }catch(error){
+        console.log("Erro ao cadastrar contato", error)
+    }
 }
-async function putContatos(id){
-    axios.put(urlApi+"/"+id)
-    .then(response =>{
-        console.log("Atualizado com sucesso")
-    })
-    .catch(error =>{
-        console.log("Erro ao atualizar", error)
-    })
+async function putContatos(id) {
+    try{
+        const response = await axios.put(urlApi+"/"+id)
+        console.log("Contato atualizado com sucesso")
+        return response.data
+    }catch(error){
+        console.log("Erro ao atualizar contato", error)
+    }
+
 }
-async function deleteContato(id){
-    axios.delete(urlApi+"/"+id)
-    .then(response =>{
+async function deleteContato(id) {
+    try{
+        const response = await axios.delete(urlApi+"/"+id)
         console.log("Contato deletado com sucesso")
-    })
-    .catch(error =>{
-        console.log("Erro ao deletar", error)
-    })
+    }catch(error){
+        console.log("Erro ao Deletar contato", error)
+    }
 }
+
+export { deleteContato, putContatos, getAllContatos, getContatoById, postContato }
