@@ -39,7 +39,7 @@ async function putContatos(id) {
 }
 async function deleteContato(id) {
     try{
-        const response = await axios.delete(urlApi+"/"+id)
+        await axios.delete(urlApi+"/"+id)
         console.log("Contato deletado com sucesso")
     }catch(error){
         console.log("Erro ao Deletar contato", error)
