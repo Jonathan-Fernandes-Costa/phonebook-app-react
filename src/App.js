@@ -4,10 +4,10 @@ import BotaoOption from './components/BotaoOption';
 import BotaoPesquisa from './components/BotaoPesquisa';
 import Header from './components/Header';
 import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons';
-//Ativo: icon
-//Data: brasileira
-//Mascara no telefone
-//Carregou a pagina chama a lista
+//Ativo: icon X
+//Data: brasileira X
+//Mascara no telefone X
+//Carregou a pagina chama a lista X
 
 //Criar um formulário Generico de cadastro/atualizar atraves de props(X)
 //Separar a pagina na pasta "pages"(X)
@@ -19,7 +19,7 @@ function App() {
     const [contacts, setContacts] = useState([{}]);
     const [searchContact, setSearchContact] = useState();
     const [showSearchContact, setShowSearchContact] = useState(false);
-    const [showList, setShowList] = useState(false);
+    const [showList, setShowList] = useState(true);
     async function FetchContatos() {
         const response = await getAllContatos();
         setContacts(response)
@@ -90,6 +90,7 @@ function App() {
                                         </thead>
                                         <tbody>
                                             {contacts.map(contact => (
+                                                
                                                 <tr key={contact.id} className="border-b bg-white-100 hover:bg-neutral-100 dark:border-neutral-500 dark:bg-neutral-700">
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.id}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.nome}</td>

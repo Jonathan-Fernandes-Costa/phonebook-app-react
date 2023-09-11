@@ -22,7 +22,7 @@ const BotaoOption = (props) => {
             <button onClick={verifica && abrirDialog} className="text-violet11  shadow-blackA7 hover:bg-mauve3 m-1 h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
                 {props.name}
             </button>
-            <Dialog.Root  open={dialogOpen} autoFocus={false} onOpenChange={fecharDialog}>
+            <Dialog.Root  open={dialogOpen} onOpenChange={fecharDialog}>
                 
                 {props.modo !== "get" && (
                     <Dialog.Portal>

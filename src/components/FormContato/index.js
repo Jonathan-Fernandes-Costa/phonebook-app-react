@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import InputMask from 'react-input-mask';
 
 function FormContato(props) {
 
@@ -11,7 +12,7 @@ function FormContato(props) {
     const [data, setData] = useState('');
     useEffect(() => {
         if (props.modo === "put") {
-            const dataFormatada = props.contato.dataNascimento.substring(0,10);
+            const dataFormatada = props.contato.dataNascimento.substring(0, 10);
             setData(dataFormatada);
             setNome(props.contato.nome);
             setEmail(props.contato.email);
@@ -120,14 +121,13 @@ function FormContato(props) {
                     <label className="text-violet11 w-[90px] text-right text-[15px]" htmlFor="fone">
                         Telefone:
                     </label>
-                    <input
-                        required
-                        type="fone"
+                    <InputMask
+                        mask="(99) 99999-9999"
                         value={telefone}
                         onChange={(e) => setTelefone(e.target.value)}
                         className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-                        id="username"
                     />
+                    
                 </fieldset>
                 <fieldset className="mb-[15px] flex items-center gap-5">
                     <label className="text-violet11 w-[90px] text-right text-[15px]" htmlFor="username">
