@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { deleteContato, getAllContatos} from './services/axios'
+import { deleteContato, getAllContatos } from './services/axios'
 import BotaoOption from './components/BotaoOption';
 import BotaoPesquisa from './components/BotaoPesquisa';
 import Header from './components/Header';
@@ -27,7 +27,7 @@ function App() {
 
     useEffect(() => {
         FetchContatos();
-         
+
     }, []);
     const handleDelete = async (id) => {
         await deleteContato(id);
@@ -54,11 +54,16 @@ function App() {
 
 
     };
+
+    const formatarDataBrasileira = (data) => {
+        const dataObj = new Date(data);
+        return dataObj.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }).slice(0, -10);
+    };
     return (
         <div>
 
             <Header></Header>
-            
+
             <button onClick={handleToggleList} className="text-violet11 shadow-blackA7 hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
                 Listar Contatos
             </button>
@@ -91,7 +96,7 @@ function App() {
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.email}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.telefone}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.ativo ? <CheckCircledIcon className='text-green-600'></CheckCircledIcon> : <CrossCircledIcon className='text-red-600'></CrossCircledIcon>}</td>
-                                                    <td className="whitespace-nowrap px-6 py-4">{contact.dataNascimento.slice(0, -9)}</td>
+                                                    <td className="whitespace-nowrap px-6 py-4">{formatarDataBrasileira(contact.dataNascimento)}</td>
                                                     <td>
                                                         <BotaoOption modo="put" name="Atualizar" text="Digite os dados para atualizar o contato" contato={contact} update={FetchContatos}></BotaoOption>
                                                         <button onClick={() => handleDelete(contact.id)} className="text-violet11 shadow-blackA7 hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
@@ -100,7 +105,7 @@ function App() {
                                                     </td>
                                                 </tr>
                                             ))}
-                                           
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -147,7 +152,7 @@ function App() {
                                                     </td>
                                                 </tr>
                                             ))}
-                                           
+
                                         </tbody>
                                     </table>
                                 </div>

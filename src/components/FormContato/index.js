@@ -11,11 +11,12 @@ function FormContato(props) {
     const [data, setData] = useState('');
     useEffect(() => {
         if (props.modo === "put") {
+            const dataFormatada = props.contato.dataNascimento.substring(0,10);
+            setData(dataFormatada);
             setNome(props.contato.nome);
             setEmail(props.contato.email);
             setTelefone(props.contato.telefone);
             setAtivo(props.contato.ativo);
-            setData(props.contato.dataNascimento);
         }
     }, [props.modo, props.contato]);
     function BotaoConfirmar() {
@@ -90,7 +91,7 @@ function FormContato(props) {
                 </label>
                 <input
                     type="text"
-                    value={props.id}
+                    value={nome}
                     onChange={(e) => setNome(e.target.value)}
                     required
                     className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
@@ -145,11 +146,12 @@ function FormContato(props) {
                         Data
                     </label>
                     <input
+                        value={data}
                         type="date"
                         onChange={(e) => setData(e.target.value)}
                         required
                         className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-                        id="username"
+                        id="data"
                     />
                 </fieldset>
 
