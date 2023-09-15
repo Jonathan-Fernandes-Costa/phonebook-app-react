@@ -39,7 +39,6 @@ function App() {
             
             if (response.status === 200) {
                 setChamada(response)
-                console.log(chamada)
                 setChamadaEmAndamento(true)
                 const dataInicio = new Date(chamada.data.inicioAtendimento);
                 const agora = new Date();
