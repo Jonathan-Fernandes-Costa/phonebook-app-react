@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { encerrarChamada, getChamadaemAndamento, iniciarChamada } from '../../services/axios';
+import { encerrarChamada, iniciarChamada } from '../../services/axios';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import {BiSolidPhoneCall} from "react-icons/bi"

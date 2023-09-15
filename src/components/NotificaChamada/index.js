@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {BiSolidPhoneCall} from "react-icons/bi"
 
 const NotificacaoChamada = (props) => {
