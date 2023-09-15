@@ -50,8 +50,11 @@ async function deleteContato(id) {
 //Funções Referentes ao Telefone
 
 async function iniciarChamada(idContato){
+    const chamada = {
+        idContato: idContato,
+    }
     try{
-        await axios.post(urlApiTelefone, idContato)
+        await axios.post(urlApiTelefone, chamada)
         console.log("Chamada iniciada cocm sucesso")
     }catch(error){
         console.log("Erro ao iniciar chamada ", error)
@@ -87,10 +90,15 @@ async function getChamadaemAndamento(){
     try {
         const response = await axios.get(`${urlApiTelefone}/chamada-em-andamento`)
         console.log("Dados retornados com sucesso!")
-        return response.data
+        return response
     } catch (error) {
-        console.log("Erro a pegar dados da chamada: ", error)
+        if(error.response.status === 404){
+            console.log("Sem chamada")
+        }else{
+            console.log("Erro ao pegar dados da chamada: ", error)
+        }
+        
     }
 }
 
-export { deleteContato, putContatos, getAllContatos, getContatoById, postContato, iniciarChamada, encerrarChamada }
+export { deleteContato, putContatos, getAllContatos, getContatoById, postContato, iniciarChamada, encerrarChamada, getChamadaemAndamento, getDadosChamada, getChamadasContato }

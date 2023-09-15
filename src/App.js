@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { deleteContato, getAllContatos } from './services/axios'
+import { deleteContato, getAllContatos, getChamadaemAndamento } from './services/axios'
 import BotaoOption from './components/BotaoOption';
 import BotaoPesquisa from './components/BotaoPesquisa';
 import Header from './components/Header';
 import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons';
-import BotaoDeletar from './BotaoDeletar';
+import BotaoDeletar from './components/BotaoDeletar';
+import NotificacaoChamada from './components/NotificaChamada';
+import BotaoChamar from './components/BotaoChamar';
+
 //Ativo: icon X
 //Data: brasileira X
 //Mascara no telefone X
@@ -16,25 +19,84 @@ import BotaoDeletar from './BotaoDeletar';
 //TRYcATCH apennas nos codigos do axios(X)
 //Radix UI e tailwindcss(X)
 //Usar o Radix para criar os modal(X)
+
 function App() {
     const [contacts, setContacts] = useState([{}]);
     const [searchContact, setSearchContact] = useState();
     const [showSearchContact, setShowSearchContact] = useState(false);
     const [showList, setShowList] = useState(true);
+    const [chamadaEmAndamento, setChamadaEmAndamento] = useState(false);
+    const [chamada, setChamada] = useState({});
+    const [segundos, setSegundos] = useState(0);
     async function FetchContatos() {
         const response = await getAllContatos();
         setContacts(response)
     }
 
-    useEffect(() => {
-        FetchContatos();
+    async function FetchChamada() {
+        try {
+            const response = await getChamadaemAndamento();
+            
+            if (response.status === 200) {
+                setChamada(response)
+                console.log(chamada)
+                setChamadaEmAndamento(true)
+                const dataInicio = new Date(chamada.data.inicioAtendimento);
+                const agora = new Date();
+                const diferencaEmSegundos = (agora - dataInicio) / 1000;
+                setSegundos(diferencaEmSegundos);
+            } else {
+                setChamadaEmAndamento(false)
+            }
+        } catch (error) {
+            console.log("Sem chamada em andamento")
+        }
 
-    }, []);
+    }
+
+    function verificaContatoEmLigação(idcontato){
+        if(chamada.data !== undefined){
+            if(chamadaEmAndamento && chamada.data.contatoId === idcontato){
+                return true
+            }else{
+                return false
+            }
+
+        }
+    }
+    useEffect(() => {
+
+        FetchContatos();
+        FetchChamada();
+        let timer;
+        if (chamadaEmAndamento) {
+            timer = setInterval(() => {
+                setSegundos((segundosAnteriores) => segundosAnteriores + 1);
+            }, 1000);
+        }
+
+        return () => {
+            clearInterval(timer);
+        }
+    }, [chamadaEmAndamento]);
+
     const handleDelete = async (id) => {
         await deleteContato(id);
         FetchContatos()
     };
+    const handleEncerrarLigação = () => {
+        setChamadaEmAndamento(false)
+        setSegundos(0)
+        setChamada({})
+    }
+    const handleIniciarLigação = () => {
+        FetchChamada()
+        FetchContatos()
+        console.log("Teste")
+        setChamadaEmAndamento(true)
 
+        ///Colocar tudo aqui, colocar para quando iniciar a ligação ele dar um fetchem
+    }
 
     const handleSearch = (nome) => {
         const contatosFiltrados = contacts.filter(contato =>
@@ -44,9 +106,6 @@ function App() {
         setShowList(false);
         setShowSearchContact(true)
     };
-
-
-
 
     const handleToggleList = () => {
         FetchContatos()
@@ -60,7 +119,9 @@ function App() {
         const dataObj = new Date(data);
         return dataObj.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }).slice(0, -10);
     };
+
     return (
+
         <div>
 
             <Header></Header>
@@ -91,7 +152,7 @@ function App() {
                                         </thead>
                                         <tbody>
                                             {contacts.map(contact => (
-                                                
+
                                                 <tr key={contact.id} className="border-b bg-white-100 hover:bg-neutral-100 dark:border-neutral-500 dark:bg-neutral-700">
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.id}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.nome}</td>
@@ -99,10 +160,10 @@ function App() {
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.telefone}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.ativo ? <CheckCircledIcon className='text-green-600'></CheckCircledIcon> : <CrossCircledIcon className='text-red-600'></CrossCircledIcon>}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{formatarDataBrasileira(contact.dataNascimento)}</td>
-                                                    <td>
+                                                    <td className="whitespace-nowrap px-6 py-4 inline-flex">
                                                         <BotaoOption modo="put" name="Atualizar" text="Digite os dados para atualizar o contato" contato={contact} update={FetchContatos}></BotaoOption>
                                                         <BotaoDeletar handle={handleDelete} contatoid={contact.id}></BotaoDeletar>
-                                                        
+                                                        <BotaoChamar handleLigar={handleIniciarLigação} handleDesligar={handleEncerrarLigação} verificaLigação={verificaContatoEmLigação} chamada={chamadaEmAndamento} setChamada={setChamadaEmAndamento} dadosChamada={chamada} contact={contact}></BotaoChamar>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -143,11 +204,12 @@ function App() {
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.nome}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.email}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.telefone}</td>
-                                                    <td className="whitespace-nowrap px-6 py-4">{contact.ativo ? "true" : "false"}</td>
+                                                    <td className="whitespace-nowrap px-6 py-4">{contact.ativo ? <CheckCircledIcon className='text-green-600'></CheckCircledIcon> : <CrossCircledIcon className='text-red-600'></CrossCircledIcon>}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{contact.dataNascimento.slice(0, -9)}</td>
                                                     <td>
                                                         <BotaoOption modo="put" name="Atualizar" text="Digite os dados para atualizar o contato" contato={contact} update={FetchContatos}></BotaoOption>
                                                         <BotaoDeletar handle={handleDelete} contatoid={contact.id}></BotaoDeletar>
+                                                        <BotaoChamar handleLigar={handleIniciarLigação} handleDesligar={handleEncerrarLigação} verificaLigação={verificaContatoEmLigação} chamada={chamadaEmAndamento} setChamada={setChamadaEmAndamento} dadosChamada={chamada} contact={contact}></BotaoChamar>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -161,10 +223,12 @@ function App() {
                 </div>
 
             )}
+            <NotificacaoChamada chamada={chamadaEmAndamento} setChamada={setChamadaEmAndamento} dadosChamada={chamada} tempo={segundos} setSegundos={setSegundos}></NotificacaoChamada>
         </div>
-    );
-}
 
+    );
+
+}
 
 
 

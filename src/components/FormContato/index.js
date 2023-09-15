@@ -56,7 +56,7 @@ function FormContato(props) {
         setNome('');
         setEmail('');
         setTelefone('');
-        setAtivo(true);
+        setAtivo(false);
         setData('');
     };
 
