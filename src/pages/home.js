@@ -10,7 +10,7 @@ import ModalAssunto from '../components/ModalAssunto';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+function Home() {
     const [contacts, setContacts] = useState([{}]);
     const [searchContact, setSearchContact] = useState();
     const [showSearchContact, setShowSearchContact] = useState(false);
@@ -223,4 +223,4 @@ function App() {
 
 
 
-export default App;
+export default Home;

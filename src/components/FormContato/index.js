@@ -1,11 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { postContato, putContatos } from '../../services/chamadasAPI';
 
 function FormContato(props) {
 
-    const urlApi = "https://api.box3.work/api/Contato/6c39d089-d593-44b5-8b7b-acad269932a8"
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [telefone, setTelefone] = useState('');
