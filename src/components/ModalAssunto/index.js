@@ -45,8 +45,8 @@ const ModalAssunto = (props) => {
             {props.verificaLigação(props.contact.id) ? (
                 <Dialog.Root>
                     <Dialog.Trigger asChild>
-                        <button className="text-red-600 m-1 hover:bg-mauve3 shadow-blackA7 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-                            <HiPhoneMissedCall size={30}></HiPhoneMissedCall>
+                        <button className="text-red-600 hover:bg-mauve3 m-1 shadow-blackA7 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
+                            <HiPhoneMissedCall size={20}></HiPhoneMissedCall>Encerrar
                         </button>
                     </Dialog.Trigger>
                     <Dialog.Portal>
@@ -91,7 +91,7 @@ const ModalAssunto = (props) => {
 
             ) : (
                 <button onClick={() => Chamar(props.contact.id)} className="text-green-600 m-1 hover:bg-mauve3 shadow-blackA7 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-                    <BiSolidPhoneCall size={30}></BiSolidPhoneCall>
+                    <BiSolidPhoneCall size={20}></BiSolidPhoneCall>Chamar
                 </button>
             )}
 

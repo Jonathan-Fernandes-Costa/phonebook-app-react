@@ -19,8 +19,8 @@ const BotaoOption = (props) => {
     };
     return (
         <div className='inline-flex'>
-            <button onClick={verifica && abrirDialog} className="text-violet11  shadow-blackA7 hover:bg-mauve3 m-1 h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
-                {props.modo === "put" ? <BsPencilSquare size={30}></BsPencilSquare> : props.name} 
+            <button onClick={verifica && abrirDialog} className="text-violet11 m-1  shadow-blackA7 hover:bg-mauve3 h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
+                {props.modo === "put" ? <div className='inline-flex items-center'><BsPencilSquare size={20}></BsPencilSquare> Editar</div> : props.name} 
             </button>
             <Dialog.Root  open={dialogOpen} onOpenChange={fecharDialog}>
                 

@@ -17,7 +17,7 @@ const BotaoPesquisa = (props) => {
 
   const confirmarPesquisa = () => {
     props.handle(nome)
-    setNome('')
+    
     setMostrarBotao(false)
   };
 
