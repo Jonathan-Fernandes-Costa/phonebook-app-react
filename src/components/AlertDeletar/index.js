@@ -1,8 +1,8 @@
 import React from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import {AiFillDelete} from "react-icons/ai"
 
-
-const BotaoDeletar = (props) => {
+const AlertDeletar = (props) => {
     const deletar = () =>{
         props.handle(props.contatoid)
     }
@@ -12,7 +12,7 @@ const BotaoDeletar = (props) => {
         <AlertDialog.Root>
         <AlertDialog.Trigger asChild>
             <button className="text-violet11 m-1 hover:bg-mauve3 shadow-blackA7 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-                Excluir
+                <AiFillDelete size={30} color='red'></AiFillDelete>
             </button>
         </AlertDialog.Trigger>
         <AlertDialog.Portal>
@@ -47,4 +47,4 @@ const BotaoDeletar = (props) => {
     
         
 
-export default BotaoDeletar;
+export default AlertDeletar;

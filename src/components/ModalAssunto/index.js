@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { encerrarChamada, iniciarChamada } from '../../services/axios';
+import { encerrarChamada, iniciarChamada } from '../../services/chamadasAPI';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import {BiSolidPhoneCall} from "react-icons/bi"
 import {HiPhoneMissedCall} from "react-icons/hi"
-const BotaoChamada = (props) => {
+
+const ModalAssunto = (props) => {
     const [assunto, setAssunto] = useState('');
 
 
@@ -45,7 +46,7 @@ const BotaoChamada = (props) => {
                 <Dialog.Root>
                     <Dialog.Trigger asChild>
                         <button className="text-red-600 m-1 hover:bg-mauve3 shadow-blackA7 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-                            <HiPhoneMissedCall></HiPhoneMissedCall>
+                            <HiPhoneMissedCall size={30}></HiPhoneMissedCall>
                         </button>
                     </Dialog.Trigger>
                     <Dialog.Portal>
@@ -90,7 +91,7 @@ const BotaoChamada = (props) => {
 
             ) : (
                 <button onClick={() => Chamar(props.contact.id)} className="text-green-600 m-1 hover:bg-mauve3 shadow-blackA7 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-                    <BiSolidPhoneCall></BiSolidPhoneCall>
+                    <BiSolidPhoneCall size={30}></BiSolidPhoneCall>
                 </button>
             )}
 
@@ -99,4 +100,4 @@ const BotaoChamada = (props) => {
 
 };
 
-export default BotaoChamada;
+export default ModalAssunto;

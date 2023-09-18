@@ -1,6 +1,8 @@
 import axios from "axios"
+import { toast } from 'react-toastify';
 const urlApiContato = "https://api.box3.work/api/Contato/6c39d089-d593-44b5-8b7b-acad269932a8"
 const urlApiTelefone = "https://api.box3.work/api/Telefone/6c39d089-d593-44b5-8b7b-acad269932a8"
+
 async function getAllContatos() {
     try {
         const response = await axios.get(urlApiContato);
@@ -9,6 +11,7 @@ async function getAllContatos() {
         console.log("Erro ao buscar contatos", error)
     }
 }
+
 async function getContatoById(id) {
     try {
         const response = await axios.get(urlApiContato + "/" + id);
@@ -22,18 +25,20 @@ async function getContatoById(id) {
 async function postContato(contato) {
     try{
         const response = await axios.post(urlApiContato, contato)
-        console.log("Cadastro realizado com sucesso")
+        toast.success("Cadastro realizado com sucesso")
         return response.data
     }catch(error){
+        toast.error("Erro ao cadastrar contato")
         console.log("Erro ao cadastrar contato", error)
     }
 }
-async function putContatos(id) {
+async function putContatos(id, dados) {
     try{
-        const response = await axios.put(urlApiContato+"/"+id)
-        console.log("Contato atualizado com sucesso")
+        const response = await axios.put(urlApiContato+"/"+id, dados)
+        toast.success("Contato atualizado com sucesso")
         return response.data
     }catch(error){
+        toast.error("Erro ao atualizar contato")
         console.log("Erro ao atualizar contato", error)
     }
 
@@ -41,8 +46,9 @@ async function putContatos(id) {
 async function deleteContato(id) {
     try{
         await axios.delete(urlApiContato+"/"+id)
-        console.log("Contato deletado com sucesso")
+        toast.success("Contato deletado com sucesso")
     }catch(error){
+        toast.error("Erro ao deletar contato")
         console.log("Erro ao Deletar contato", error)
     }
 }
@@ -55,15 +61,20 @@ async function iniciarChamada(idContato){
     }
     try{
         await axios.post(urlApiTelefone, chamada)
-        console.log("Chamada iniciada cocm sucesso")
+        toast.success("Chamada iniciada com sucesso")
     }catch(error){
-        console.log("Erro ao iniciar chamada ", error)
+        console.log(error)
+        if(error.response.status === 400){
+            toast.error("Erro! você já está em uma chamada")
+        }else{
+            toast.error("Erro ao iniciar chamada")
+        }
     }
 }
 async function encerrarChamada(id, assunto){
     try {
         await axios.put(`${urlApiTelefone}/${id}`, assunto)
-        console.log("Chamda encerrada com sucesso")
+        toast.info("Chamada encerrada!")
     } catch (error) {
         console.log("Erro ao finalizar chamada: ", error)
     }

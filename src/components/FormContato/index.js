@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
+import { postContato, putContatos } from '../../services/chamadasAPI';
 
 function FormContato(props) {
 
@@ -29,7 +30,7 @@ function FormContato(props) {
         }
         props.onSubmit();
     }
-    const handleCadastro = (e) => {
+    const handleCadastro = async (e) => {
         const novoCadastro = {
             nome: nome,
             email: email,
@@ -37,30 +38,17 @@ function FormContato(props) {
             ativo: ativo,
             dataNascimento: data,
         };
-        axios.post(urlApi, novoCadastro)
-            .then(response => {
-                console.log('Cadastro realizado com sucesso:', response.data);
-                setNome('');
-                setEmail('');
-                setTelefone('');
-                setAtivo(true);
-                setData('');
-                props.update()
-            })
-            .catch(error => {
-                console.error('Erro ao cadastrar:', error);
-            });
-
-
-
+        await postContato(novoCadastro);
         setNome('');
         setEmail('');
         setTelefone('');
         setAtivo(false);
         setData('');
+        props.update()
+
     };
 
-    const handleAtualizar = (e) => {
+    const handleAtualizar = async (e) => {
 
         const dadosAtualizados = {
             nome: nome,
@@ -69,19 +57,13 @@ function FormContato(props) {
             ativo: ativo,
             dataNascimento: data,
         };
-        axios.put(`${urlApi}/${props.contato.id}`, dadosAtualizados)
-            .then(response => {
-                console.log('Cadastro atualizado com sucesso:', response.data);
-                setNome('');
-                setEmail('');
-                setTelefone('');
-                setAtivo(true);
-                setData('');
-                props.update()
-            })
-            .catch(error => {
-                console.error('Erro ao atualizar cadastro:', error);
-            });
+        await putContatos(props.contato.id, dadosAtualizados)
+        setNome('');
+        setEmail('');
+        setTelefone('');
+        setAtivo(false);
+        setData('');
+        props.update()
     };
 
     return (
@@ -127,7 +109,7 @@ function FormContato(props) {
                         onChange={(e) => setTelefone(e.target.value)}
                         className="text-violet11 shadow-violet7 focus:shadow-violet8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
                     />
-                    
+
                 </fieldset>
                 <fieldset className="mb-[15px] flex items-center gap-5">
                     <label className="text-violet11 w-[90px] text-right text-[15px]" htmlFor="username">

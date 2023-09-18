@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import FormContato from '../FormContato';
-
+import {BsPencilSquare} from 'react-icons/bs'
 const BotaoOption = (props) => {
     const verifica = () => {
         if (props.modo === "get") {
@@ -20,7 +20,7 @@ const BotaoOption = (props) => {
     return (
         <div className='inline-flex'>
             <button onClick={verifica && abrirDialog} className="text-violet11  shadow-blackA7 hover:bg-mauve3 m-1 h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
-                {props.name}
+                {props.modo === "put" ? <BsPencilSquare size={30}></BsPencilSquare> : props.name} 
             </button>
             <Dialog.Root  open={dialogOpen} onOpenChange={fecharDialog}>
                 
